@@ -86,11 +86,11 @@ Penelitian ini menggunakan model dan algoritma supervised learning dengan menggu
 3. **Naive Bayes** 
 4. **Decision Tree**
 
-Selanjutnya, model berbasis BERT (bert-base-uncased) digunakan sebagai pembanding. Model ini memanfaatkan arsitektur transformer untuk menangkap konteks dari kata secara lebih mendalam.
+Selanjutnya, model berbasis BERT ) digunakan sebagai pembanding. Model ini memanfaatkan arsitektur transformer untuk menangkap konteks dari kata secara lebih mendalam.
 
 
 ### 2.4. Experimental Setup  
-Eksperimen dilakukan menggunakan Python dengan framework Scikit-Learn untuk supervised learning dan PyTorch untuk BERT.  
+Eksperimen dilakukan menggunakan Python dengan framework Scikit-Learn untuk supervised learning dan PyTorch untuk fine-tuning BERT.  
 Tahapan Supervised Learning adalah sebagai berikut:
 - Penyiapan Dataset: Dataset yang digunakan merupakan data akronim dan ekspansinya yang telah dilakukan ekstraksi fitur menjadi delapan fitur penting (F1 s.d F8). 
 - Tuning Hyperparameter: dilakukan dengan GridSearchCV untuk menentukan hyperparameter terbaik.  
@@ -100,10 +100,11 @@ Tahapan Supervised Learning adalah sebagai berikut:
 Tahapan untuk Deep Learning berbasis transformer dengan BERT adalah sebagai berikut:
 - Penyiapan Dataset: Dataset yang digunakan terdiri dari fitur 'akronim=>ekspansi' serta label yang perlu dilakukan preprocessing menggunakan tokenizer dari BERT dan menyimpannya dalam dataset custom dalam bentuk tensor agar bisa dilatih dalam pytorch
 - Inisiasi model : Mengimpor model BERT (pre-trained) sebelumnya dari Hugging Face
-- Menyiapkan trainer dan fine tuning : 
+- Menyiapkan trainer dan fine tuning : Model pretrained BERT dilatih dengan 4000 sampel training set
+- Selanjutnya model dilakukan evaluasi menggunakan metrik evaluasi yang sudah ditentukan.
 
 ### 2.5. Evaluation Metrics  
-Untuk mengevaluasi performa model, kami menggunakan metrik berikut:  
+Tahapan evalusasi model, metric yang digunakan adalah sebagai berikut:  
 - **F1-score**: Untuk menilai keseimbangan antara presisi dan recall.  
 - **Accuracy**: Untuk melihat persentase prediksi yang benar.  
 - **Confusion Matrix**: Untuk analisis kesalahan klasifikasi.  
