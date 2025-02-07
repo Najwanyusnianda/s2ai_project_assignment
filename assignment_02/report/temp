@@ -1,0 +1,207 @@
+\documentclass{article}\usepackage{float}
+
+% Language setting
+% Replace `english' with e.g. `spanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with `a4paper' for UK/EU standard size
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{booktabs} 
+\usepackage{graphicx}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Klasifikasi Akronim dan Ekspansinya Dengan Algorithma Supervised Learning dan BERT}
+\author{Najwan Yusnianda \\ NIM: 2408207010029}
+\date{}
+
+\begin{document}
+\maketitle
+
+
+
+\section{Introduction}
+
+Selama beberapa dekade terakhir, identifikasi pasangan akronim dan perluasannya dari korpus teks besar telah menjadi topik penelitian yang menarik perhatian luas, terutama dalam bidang text mining, ekstraksi entitas, dan pencarian informasi. Akronim, sebagai bentuk singkatan dari frasa atau istilah panjang, sering digunakan dalam berbagai domain. Namun, penggunaan akronim yang tidak konsisten atau ambigu dapat menimbulkan tantangan dalam pemrosesan teks otomatis, terutama ketika mencoba memahami makna sebenarnya dari suatu dokumen atau teks.
+
+Tantangan utama dalam identifikasi akronim adalah menentukan pasangan yang tepat antara akronim dan ekspansinya, terutama dalam korpus yang besar dan beragam. Proses ini memerlukan pendekatan yang canggih untuk memastikan akurasi dan keandalan dalam ekstraksi informasi.
+Salah satu penelitian yang signifikan dilakukan oleh Taufik et al. \cite{ref1}, yang memperkenalkan delapan fitur vektor untuk menggambarkan hubungan antara akronim dan ekspansinya. Fitur-fitur ini dirancang untuk menangkap karakteristik dari pasangan akronim dan ekspansi, sehingga memungkinkan model machine learning untuk mendapatkan akurasi yang tinggi dan optimal dalam klasifikasi. Penelitian ini menunjukkan bahwa pendekatan berbasis fitur yang dirancang dengan baik dapat menjadi solusi efektif untuk masalah identifikasi akronim.
+
+Namun, dengan kemajuan pesat dalam bidang pemrosesan bahasa alami (Natural Language Processing/NLP), pendekatan berbasis deep learning, khususnya model berbasis transformer seperti BERT (Bidirectional Encoder Representations from Transformers), telah menunjukkan kinerja yang luar biasa dalam berbagai tugas NLP, termasuk klasifikasi teks dan ekstraksi informasi. Model ini mampu menangkap konteks dan makna kata secara lebih mendalam, sehingga berpotensi meningkatkan akurasi dalam identifikasi pasangan akronim-ekspansi.
+
+Penelitian ini bertujuan untuk mengeksplorasi dan membandingkan dua pendekatan utama dalam identifikasi pasangan akronim-ekspansi: metode klasifikasi supervised learning dan metode klasifikasi deep learning berbasis transformer menggunakan BERT. Dengan membandingkan kedua pendekatan ini, penelitian ini diharapkan dapat memberikan wawasan tentang metode mana yang lebih efektif dalam menangani tantangan identifikasi akronim, serta memberikan rekomendasi untuk pengembangan sistem yang lebih baik di masa depan.
+
+
+
+
+
+\section{Methodology }
+
+\subsection{Dataset}
+
+Dataset yang digunakan dalam penelitian ini berasal dari dataacro \cite{ref1} berupa teks yang terdiri dari pasangan akronim dan ekspansinya serta label(-1 dan 1) serta 8 fitur hasil dari ekstraksi fitur pasangan akronim yang telah diekstraksi. Dataset ini terdiri dari training set (4000 sampel) dengan testing set (1099 sampel). Berikut adalah beberapa contoh training set:
+
+\begin{verbatim}
+BUMD=>Usaha Milik -1 1:0.918 2:1 3:-0.667 4:0 5:1 6:0.5 7:0 8:0.393
+TNI=>meminjam senjata dari oknum -1 1:1 2:0.5 3:-2 4:0 5:0.75 6:0 7:0 8:0.036
+PKI=>Panitia Pengawas -1 1:0.971 2:1 3:-1 4:0.5 5:1 6:0.333 7:0 8:0.401
+\end{verbatim}
+
+Data tersebut selanjutnya dilakukan proses preprocessing dan mengubahnya menjadi 2 bagian untuk supervised learning dan untuk Deep Learning Berbasis Transformer.
+Pada Model supervised learning, Data yang digunakan berupa fitur -fitur yang telah diekstrak seperti yang dijelaskan sebelumnya. rincian fitur-fitur tersebut adalah sebagai berikut:
+
+\begin{itemize}
+    \item \textbf{Fitur 1}: Korelasi antara jumlah total karakter dalam akronim dan total jumlah kata dalam ekspansi.
+    \item \textbf{Fitur 2}: Jumlah kata dalam ekspansi yang menggunakan huruf besar pada awal kata.
+    \item \textbf{Fitur 3}: Penimbang kecocokan huruf-huruf dalam akronim dan ekspansi/kepanjangannya, tidak termasuk kata sambung.
+    \item \textbf{Fitur 4}: Penimbang korelasi antara huruf pertama dan terakhir dari akronim.
+    \item \textbf{Fitur 5}: Nilai penalti kepada akronim yang mengandung banyak preposisi (kata depan) dan konjungsi (kata penghubung).
+    \item \textbf{Fitur 6}: Rasio kecocokan yang tepat antara karakter dalam ekspansi dan karakter dalam akronim.
+    \item \textbf{Fitur 7}: Nilai pembeda antara rasio kecocokan yang akurat (Fitur 6) dan rasio yang tidak akurat.
+    \item \textbf{Fitur 8}: Rata-rata dari Fitur 1 hingga Fitur 7.
+\end{itemize} 
+
+\begin{table}
+\centering
+\begin{tabular}{r|*{9}{l}}
+Index & F1 & F2 & F3 & F4 & F5 & F6 & F7 & F8 & label \\ \midrule
+0 & 0.918 & 1.000 & -0.667 & 0.000 & 1.000 & 0.500 & 0.000 & 0.393 & 0 \\
+1 & 1.000 & 0.500 & -2.000 & 0.000 & 0.750 & 0.000 & 0.000 & 0.036 & 0 \\
+2 & 0.971 & 1.000 & -1.000 & 0.500 & 1.000 & 0.333 & 0.000 & 0.401 & 0 \\
+3 & 1.000 & 0.750 & -2.000 & 0.000 & 1.000 & 1.000 & 1.000 & 0.393 & 0 \\
+4 & 0.971 & 0.667 & -2.500 & 0.000 & 1.000 & 0.000 & 0.000 & 0.020 & 0 \\
+\bottomrule
+\end{tabular}
+\caption{\label{tab:data} Dataset yang digunakan untuk supervised learning.}
+\end{table}
+
+
+
+Sedangkan pada model deep learning berbasis transformer, data yang digunakan berupa teks yang belum diekstrak. Hali ini karena Transformer khususnya BERT mempunyai metode embedding tersendiri untuk mengubah teks menjadi fitur vektor sehingga tidak perlu ekstraksi fitur.
+
+\begin{table}
+\centering
+\begin{tabular}{r|l|r}
+\toprule
+Index & Fitur teks                          & Label \\ \midrule
+0 & BUMD => Usaha Milik                &     0 \\
+1 & TNI => meminjam senjata dari oknum &     0 \\
+2 & PKI => Panitia Pengawas            &     0 \\
+3 & MA  => putusan Mahkamah            &     0 \\
+4 & TI  => com Mati body               &     0 \\ \bottomrule
+\end{tabular}
+\caption{\label{tab:text_features}Dataset yang digunakan untuk BERT.}
+\end{table}
+
+
+\subsection{deskriptive Analysis }
+
+Pada gambar \ref{fig:Dist_Feature} menunjukan  nilai antar fitur memiliki variasi yang beragam. Sebagian besar fitur, seperti F1, F2, F4, F5, dan F7, menunjukkan distribusi yang cenderung berada pada nilai mendekati 0 atau 1. Fitur lainnya, seperti F3, F6, dan F8, memiliki distribusi yang lebih tersebar, menunjukkan adanya variasi yang lebih merata dalam fitur-fitur tersebut. Hal ini dapat memberikan gambaran penting terkait s berkontribusi pada model yang akan dibangun.
+
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{img/dist_fitur.png}
+\caption{\label{fig:Dist_Feature}Distribusi nilai fitur-fitur akronim dan ekspansinya dalam training set}
+\end{figure}
+
+Selanjutnya Distribusi Training sampel pada gambar \ref{fig:Dist_Label} memiliki jumlah sampel yang sama untuk setiap kelas yaitu kelas 0 dan 1 yaitu 2000 sample untuk masing -masing kelas. Kelas 0 merupakan kelas yang sebelumnya bernilai -1 sebelum dilakukan preprocessing untuk memudahkan pada saat pelatihan model.
+
+
+\begin{figure}
+\centering
+\includegraphics[width=1\linewidth]{img/dist_label.png}
+\caption{\label{fig:Dist_Label}Distribusi nilai kelas dan korelasi antar fitur pada training set}
+\end{figure}
+
+
+Analisis korelasi antar fitur 1 hingga 8 menunjukkan hubungan yang signifikan, dengan beberapa fitur memiliki korelasi yang sangat tinggi. Secara spesifik, fitur F3, F4, F6, F7, dan F8 menunjukkan korelasi yang sangat kuat satu sama lain, dengan koefisien korelasi mencapai hampir 1, mengindikasikan adanya ketergantungan yang tinggi antar fitur tersebut. Sebaliknya, fitur F1 dan F2 memiliki korelasi yang relatif rendah dengan sebagian besar fitur lainnya. Fitur F5 juga menunjukkan korelasi yang lebih rendah dibandingkan dengan kelompok fitur yang berkorelasi tinggi tersebut. Hal ini menunjukkan bahwa meskipun ada kelompok fitur yang memiliki dependensi yang tinggi,namun masih terdapat fitur-fitur independen yang dapat memberikan informasi tambahan dan berpotensi meningkatkan akurasi model dalam analisis data akronim dan ekspansinya. 
+
+
+\subsection{Model and Algorithms }
+Penelitian ini menggunakan model dan algoritma supervised learning dengan memanfaatkan delapan fitur tersebut untuk menemukan model terbaik. Model-model tersebut kemudian dibandingkan dengan model berbasis Transformer, yaitu BERT (Bidirectional Encoder Representations from Transformers). Model supervised learning yang digunakan adalah sebagai berikut:
+\begin{itemize}
+    \item \textbf{Support Vector Machine (SVM)}: Algoritma yang bekerja dengan menemukan hyperplane terbaik untuk memisahkan kelas dalam ruang fitur.
+    \item \textbf{K-Nearest Neighbor (KNN)}: Algoritma yang mengklasifikasikan data berdasarkan kedekatan jarak dengan tetangga terdekatnya.
+    \item \textbf{Naive Bayes}: Algoritma probabilistik yang didasarkan pada teorema Bayes dengan asumsi independensi antar fitur.
+    \item \textbf{Decision Tree}: Algoritma yang memodelkan keputusan dalam bentuk pohon dengan aturan-aturan berbasis fitur.
+\end{itemize}
+
+Selanjutnya, model berbasis \textbf{BERT} digunakan sebagai pembanding. Model ini memanfaatkan arsitektur transformer untuk menangkap konteks dari kata secara lebih mendalam melalui mekanisme self-attention, sehingga mampu menghasilkan representasi vektor yang kaya akan informasi semantik. Dengan pendekatan ini, BERT dapat memberikan hasil yang lebih baik dalam klasifikasi teks.
+
+\subsection{Experimental Setup }
+
+Eksperimen dilakukan menggunakan Python dengan framework Scikit-Learn untuk supervised learning dan PyTorch untuk fine-tuning BERT.
+
+\subsubsection*{Tahapan untuk Supervised Learning}
+Tahapan supervised learning adalah sebagai berikut:
+\begin{itemize}
+    \item \textbf{Penyiapan Dataset}: Dataset yang digunakan merupakan data akronim dan ekspansinya yang telah dilakukan ekstraksi fitur menjadi delapan fitur penting (F1 hingga F8).
+    \item \textbf{Tuning Hyperparameter}: Dilakukan dengan \textit{GridSearchCV} untuk menentukan hyperparameter terbaik.
+    \item \textbf{Pelatihan Model}: Model dilatih dengan 4000 sampel training set dan 1099 sampel testing set.
+    \item \textbf{Evaluasi Model}: Selanjutnya, setiap model dievaluasi menggunakan metrik evaluasi yang telah ditentukan.
+\end{itemize}
+
+\subsubsection*{Tahapan untuk BERT}
+Tahapan untuk deep learning berbasis transformer dengan BERT adalah sebagai berikut:
+\begin{itemize}
+    \item \textbf{Penyiapan Dataset}: Dataset yang digunakan terdiri dari fitur `akronim=>ekspansi` serta label yang perlu dilakukan preprocessing menggunakan tokenizer dari BERT. Data kemudian disimpan dalam dataset custom dalam bentuk tensor agar dapat dilatih dalam PyTorch.
+    \item \textbf{Inisiasi Model dan Bert Tokenizer}: Mengimpor model BERT (pre-trained) sebelumnya dari Hugging Face dan melakukan tokenisasi.
+    \item \textbf{Menyiapkan Trainer dan Fine-Tuning}: Model pre-trained BERT dilatih dengan 4000 sampel training set.
+    \item \textbf{Evaluasi Model}: Selanjutnya, model dievaluasi menggunakan metrik evaluasi yang telah ditentukan.
+\end{itemize}
+
+\subsection{Evaluation MEtric}
+
+You can make lists with automatic numbering \dots
+
+\begin{enumerate}
+\item Like this,
+\item and like this.
+\end{enumerate}
+\dots or bullet points \dots
+\begin{itemize}
+\item Like this,
+\item and like this.
+\end{itemize}
+
+\subsection{How to write Mathematics}
+
+\LaTeX{} is great at typesetting mathematics. Let $X_1, X_2, \ldots, X_n$ be a sequence of independent and identically distributed random variables with $\text{E}[X_i] = \mu$ and $\text{Var}[X_i] = \sigma^2 < \infty$, and let
+\[S_n = \frac{X_1 + X_2 + \cdots + X_n}{n}
+      = \frac{1}{n}\sum_{i}^{n} X_i\]
+denote their mean. Then as $n$ approaches infinity, the random variables $\sqrt{n}(S_n - \mu)$ converge in distribution to a normal $\mathcal{N}(0, \sigma^2)$.
+
+
+\subsection{How to change the margins and paper size}
+
+Usually the template you're using will have the page margins and paper size set correctly for that use-case. For example, if you're using a journal article template provided by the journal publisher, that template will be formatted according to their requirements. In these cases, it's best not to alter the margins directly.
+
+If however you're using a more general template, such as this one, and would like to alter the margins, a common way to do so is via the geometry package. You can find the geometry package loaded in the preamble at the top of this example file, and if you'd like to learn more about how to adjust the settings, please visit this help article on \href{https://www.overleaf.com/learn/latex/page_size_and_margins}{page size and margins}.
+
+\subsection{How to change the document language and spell check settings}
+
+Overleaf supports many different languages, including multiple different languages within one document. 
+
+To configure the document language, simply edit the option provided to the babel package in the preamble at the top of this example project. To learn more about the different options, please visit this help article on \href{https://www.overleaf.com/learn/latex/International_language_support}{international language support}.
+
+To change the spell check language, simply open the Overleaf menu at the top left of the editor window, scroll down to the spell check setting, and adjust accordingly.
+
+\subsection{How to add Citations and a References List}
+
+You can simply upload a \verb|.bib| file containing your BibTeX entries, created with a tool such as JabRef. You can then cite entries from it, like this: \cite{greenwade93}. Just remember to specify a bibliography style, as well as the filename of the \verb|.bib|. You can find a \href{https://www.overleaf.com/help/97-how-to-include-a-bibliography-using-bibtex}{video tutorial here} to learn more about BibTeX.
+
+If you have an \href{https://www.overleaf.com/user/subscription/plans}{upgraded account}, you can also import your Mendeley or Zotero library directly as a \verb|.bib| file, via the upload menu in the file-tree.
+
+\subsection{Good luck!}
+
+We hope you find Overleaf useful, and do take a look at our \href{https://www.overleaf.com/learn}{help library} for more tutorials and user guides! Please also let us know if you have any feedback using the Contact Us link at the bottom of the Overleaf menu --- or use the contact form at \url{https://www.overleaf.com/contact}.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+\bibitem{ref1} Abidin TF, Mahazir A, Subianto M, Munadi K, Ferdhiana R. Recognizing Indonesian Acronym and Expansion Pairs with Supervised Learning and MapReduce. Information. 2020; 11(4):210.
+\end{thebibliography}
+
+\end{document}
