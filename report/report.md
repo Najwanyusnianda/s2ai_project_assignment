@@ -110,10 +110,38 @@ Tahapan evalusasi model, metric yang digunakan adalah sebagai berikut:
 - **Confusion Matrix**: Untuk analisis kesalahan klasifikasi.  
 
 ## 3. Results and Discussion 
-Berikut adalah hasil penelitian:  
+Berikut adalah hasil penelitian: 
 
 
+evaluasi training_data
 
+
+evaluasi test_data
+|    | Model                    | Confusion Matrix       |   TP |   FP |   FN |   TN |   Precision |   Recall |   F1-Score |
+|---:|:-------------------------|:-----------------------|-----:|-----:|-----:|-----:|------------:|---------:|-----------:|
+|  0 | K-Nearest Neighbor (kNN) | [[498, 2], [294, 305]] |  305 |    2 |  294 |  498 |    0.993485 | 0.509182 |   0.673289 |
+|  1 | Naive Bayes              | [[500, 0], [66, 533]]  |  533 |    0 |   66 |  500 |    1        | 0.889816 |   0.941696 |
+|  2 | Decision Tree            | [[496, 4], [45, 554]]  |  554 |    4 |   45 |  496 |    0.992832 | 0.924875 |   0.957649 |
+|  3 | BERT                     | [[267, 233], [8, 591]] |  591 |  233 |    8 |  267 |    0.717233 | 0.986644 |   0.830639 |
+|  4 | SVM                      | [[498, 2], [29, 570]]  |  570 |    2 |   29 |  498 |    0.996503 | 0.951586 |   0.973527 |
+
+evaluasi training data
+|    | Model                    | Confusion Matrix          |   TP |   FP |   FN |   TN |   Precision |   Recall |   F1-Score |
+|---:|:-------------------------|:--------------------------|-----:|-----:|-----:|-----:|------------:|---------:|-----------:|
+|  0 | K-Nearest Neighbor (kNN) | [[1967, 33], [1232, 768]] |  768 |   33 | 1232 | 1967 |    0.958801 |   0.384  |   0.548376 |
+|  1 | Naive Bayes              | [[1968, 32], [73, 1927]]  | 1927 |   32 |   73 | 1968 |    0.983665 |   0.9635 |   0.973478 |
+|  2 | Decision Tree            | [[1961, 39], [11, 1989]]  | 1989 |   39 |   11 | 1961 |    0.980769 |   0.9945 |   0.987587 |
+|  3 | BERT                     | [[1993, 7], [16, 1984]]   | 1984 |    7 |   16 | 1993 |    0.996484 |   0.992  |   0.994237 |
+|  4 | SVM                      | [[1961, 39], [13, 1987]]  | 1987 |   39 |   13 | 1961 |    0.98075  |   0.9935 |   0.987084 |
+
+evaluasi waktu training
+|    | Model                    |   Training_time |   Predict_time |
+|---:|:-------------------------|----------------:|---------------:|
+|  0 | K-Nearest Neighbor (kNN) |      1.27896    |     0.163998   |
+|  1 | Naive Bayes              |      0.00200081 |     0.00100636 |
+|  2 | Decision Tree            |      0.324775   |     0.00100446 |
+|  3 | BERT                     |    286.69       |    17.757      |
+|  4 | SVM                      |      9.72459    |     0.0090909  |
 
 ## 4. Conclusion 
 Hasilnya menunjukkan bahwa...  
