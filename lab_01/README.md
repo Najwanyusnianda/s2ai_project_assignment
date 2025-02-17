@@ -4,23 +4,6 @@
 
 # PERTEMUAN I
 
-## DOSEN PENGASUH:
-
-```
-Prof. Dr. Taufik Fuadi Abidin, M.Tech
-```
-```
-Dr. Rumaisa Kruba, S.Si
-Prof. Dr. Ir. Hammam Riza, M.Sc,. IPU
-```
-Praktisi Komdigi (Dr. Said Mirza Pahlevi)
-
-## ASISTEN PRAKTIKUM:
-
-```
-Muhammad Chaidir, S.Kom, M.Kom
-```
-
 ```
 Step-by-Step Guideline for Running MTCNN on FaceScrub Dataset
 ```
@@ -33,6 +16,7 @@ the FaceScrub dataset and saving the detected face images using Python.
 ```
 **2. Prerequisites**
 
+dataset :[facescrub dataset](https://vintage.winklerbros.net/facescrub.html)
 ```
 Before running the code, ensure you have the required libraries installed. Use the following
 command to install missing dependencies:
