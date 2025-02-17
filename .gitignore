@@ -5,3 +5,5 @@ lab_01/new_mtcnn
 
 lab_01/facescrub_dataset_samples.zip
 assignment_03/faceScrub.zip
+results/
+saved_bert_model/
