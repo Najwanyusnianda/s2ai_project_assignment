@@ -12,3 +12,7 @@ lab_02/facescrub_dataset_cleaned2
 results/
 saved_bert_model/
 
+lab_04/dataset/bank-additional/bank-additional.csv
+lab_04/dataset/bank-additional/bank-additional-names.txt
+lab_04/dataset/bank-additional/.DS_Store
+lab_04/dataset/bank-additional/.Rhistory
